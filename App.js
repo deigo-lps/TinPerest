@@ -1,33 +1,27 @@
-import { useEffect, useState } from "react";
-import { StatusBar, StyleSheet, Text, View } from "react-native";
+import "react-native-gesture-handler";
+import Login from "./screens/Login";
+import CreateAccount from "./screens/CreateAccount";
+import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationContainer } from "@react-navigation/native";
 export default function App() {
-  const [test, setTest] = useState("asddsa");
-  const handlePost = async () => {
-    const response = await fetch(process.env.EXPO_PUBLIC_FIREBASE_URL, {
-      method: "PUT",
-      body: JSON.stringify({
-        test: "asd",
-      }),
-    });
+  const LoginStack = () => {
+    const Stack = createStackNavigator();
+    return (
+      <Stack.Navigator
+        screenOptions={{
+          headerTransparent: true,
+          headerTintColor: "#fff",
+        }}
+      >
+        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+        <Stack.Screen name="Create Account" component={CreateAccount} options={{ headerTitle: () => null }} />
+      </Stack.Navigator>
+    );
   };
 
-  useEffect(() => {
-    handlePost();
-  }, []);
-
   return (
-    <View style={styles.container}>
-      <Text>{test}</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <LoginStack />
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
