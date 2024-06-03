@@ -7,11 +7,14 @@ const UserContext = React.createContext({
   favorites: [],
   updateFavorites: async (newFav) => {},
   initFavorites: (fav) => {},
+  following: [],
+  setFollowing: ()=>{}
 });
 
 export const UserContextProvider = (props) => {
   const [user, setUser] = useState("");
   const [favorites, setFavorites] = useState([]);
+  const [following, setFollowing] = useState([]);
 
   const updateFavorites = async (newFav) => {
     if (favorites?.includes(newFav)) {
@@ -28,7 +31,7 @@ export const UserContextProvider = (props) => {
   };
 
   return (
-    <UserContext.Provider value={{ user, setUser, favorites, updateFavorites, initFavorites }}>
+    <UserContext.Provider value={{ user, setUser, favorites, updateFavorites, initFavorites, following, setFollowing }}>
       {props.children}
     </UserContext.Provider>
   );

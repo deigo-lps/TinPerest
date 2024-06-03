@@ -1,11 +1,14 @@
+import { useContext } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import UserContext from "../context/user-context";
 
 export default function Comment({ data, navigation }) {
+  const ctx = useContext(UserContext);
   return (
     <Pressable
       style={styles.comment}
       onPress={() => {
-        navigation.navigate("Profile", { user: data.user });
+        data.user === ctx.user ? navigation.navigate("MyProfile") : navigation.navigate("Profile", { user: data.user });
       }}
     >
       <Text style={styles.userName}>{data.user}</Text>

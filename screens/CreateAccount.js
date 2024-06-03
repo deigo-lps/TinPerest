@@ -41,7 +41,7 @@ export default function CreateAccount({ navigation }) {
       ctx.setUser(userName);
       ctx.initFavorites(null);
       await awaitConfirmation({ title: "User Created", message: `${userName} created.` });
-      navigation.navigate("Home");
+      navigation.navigate("Main Navigation");
     } else {
       // TODO
     }

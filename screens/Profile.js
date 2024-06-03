@@ -7,33 +7,33 @@ import ArtCard from "../components/ArtCard";
 import UserContext from "../context/user-context";
 export default function Profile({ navigation, route }) {
   const ctx = useContext(UserContext);
-  const { user } = route.params;
+  const { user } = route.params || { user: ctx.user };
   const [userData, setUserData] = useState();
   const [favorites, setFavorites] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
-  const [CurrentUserFollowing, setCurrentUserFollowing] = useState();
 
   const handleFollow = async () => {
     let newCurrentUserFollowing;
     let newFollowers;
-    if (CurrentUserFollowing.includes(user)) {
-      newCurrentUserFollowing = CurrentUserFollowing.filter((CurrentUserFollowing) => CurrentUserFollowing !== user);
+    if (ctx.following.includes(user)) {
+      newCurrentUserFollowing = ctx.following.filter((following) => following !== user);
       newFollowers = followers.filter((follower) => follower !== ctx.user);
     } else {
-      newCurrentUserFollowing = [...CurrentUserFollowing, user];
+      newCurrentUserFollowing = [...ctx.following, user];
       newFollowers = [...followers, ctx.user];
     }
     await handleApi({ method: "PUT", url: `/users/${user}/followers.json`, body: newFollowers });
     await handleApi({ method: "PUT", url: `/users/${ctx.user}/following.json`, body: newCurrentUserFollowing });
-    setCurrentUserFollowing(newCurrentUserFollowing);
+    ctx.setFollowing(newCurrentUserFollowing);
     setFollowers(newFollowers);
   };
 
   useEffect(() => {
     const initialFetch = async () => {
       setIsLoaded(false);
+      setFavorites([]);
       const userData = await handleApi({ method: "GET", url: `/users/${user}.json` });
       setUserData(userData);
       const links = userData.favorites || [];
@@ -47,19 +47,17 @@ export default function Profile({ navigation, route }) {
         })
       );
 
-      const following = await handleApi({ method: "get", url: `/users/${user}/following.json` });
-      setFollowing(following || []);
-
-      const CurrentUserFollowingList = await handleApi({ method: "GET", url: `/users/${ctx.user}/CurrentUserFollowing.json` });
+      const following = await handleApi({ method: "GET", url: `/users/${user}/following.json` });
+      if(user === ctx.user) ctx.setFollowing(following || [])
+      else setFollowing(following || []);
       const followersList = await handleApi({ method: "GET", url: `/users/${user}/followers.json` });
       setFollowers(followersList || []);
-      setCurrentUserFollowing(CurrentUserFollowingList || []);
       setIsLoaded(true);
     };
     initialFetch();
-  }, []);
+  }, [ctx.favorites]);
   return (
-    <Container style={{ paddingTop: 0 }}>
+    <Container style={user !== ctx.user && { paddingTop: 0 }}>
       {isLoaded ? (
         <FlatList
           data={favorites}
@@ -83,14 +81,16 @@ export default function Profile({ navigation, route }) {
                   <Text style={styles.text}>Followers: {followers.length}</Text>
                 </Pressable>
                 <Pressable>
-                  <Text style={styles.text}>Following: {following.length}</Text>
+                  <Text style={styles.text}>Following: {user !== ctx.user ? following.length : ctx.following.length}</Text>
                 </Pressable>
               </View>
               {user !== ctx.user ? (
-              <Pressable style={styles.followBtn} onPress={handleFollow}>
-                <Text style={styles.followBtnText}>{CurrentUserFollowing.includes(user) ? "Unfollow" : "Follow"}</Text>
-              </Pressable>
-              ) : <></>}
+                <Pressable style={styles.followBtn} onPress={handleFollow}>
+                  <Text style={styles.followBtnText}>{ctx.following.includes(user) ? "Unfollow" : "Follow"}</Text>
+                </Pressable>
+              ) : (
+                <></>
+              )}
               <Text style={styles.favTitle}>Favorites</Text>
             </View>
           }

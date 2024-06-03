@@ -27,7 +27,9 @@ export default function Login({ navigation }) {
       ctx.setUser(userName);
       const favorites = await handleApi({ method: "GET", url: `/users/${userName}/favorites.json` });
       ctx.initFavorites(favorites);
-      navigation.navigate("Home");
+      setUserName("")
+      setPassword("")
+      navigation.navigate("Main Navigation");
     }
     setIsLoading(false);
   };
