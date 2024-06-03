@@ -1,8 +1,10 @@
 import { Pressable, StyleSheet, Text } from "react-native";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import handleApi from "../utils/handleApi";
 import FollowBtn from "./ui/FollowBtn";
+import UserContext from "../context/user-context";
 export default function User({ username, navigation }) {
+  const ctx = useContext(UserContext)
   const [followers, setFollowers] = useState([]);
 
   useEffect(() => {
@@ -16,7 +18,7 @@ export default function User({ username, navigation }) {
   return (
     <Pressable style={styles.card} onPress={()=>{navigation.navigate("Profile",{user: username})}}>
       <Text style={styles.text}>{username}</Text>
-      <FollowBtn user={username} followers={followers} setFollowers={setFollowers}/>
+      {username !== ctx.user && <FollowBtn user={username} followers={followers} setFollowers={setFollowers}/>}
     </Pressable>
   );
 }

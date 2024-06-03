@@ -51,6 +51,7 @@ export default function App() {
         <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
         <Stack.Screen name="Art" component={Art} options={{ headerTitle: () => null }} />
         <Stack.Screen name="Profile" component={Profile} options={{ headerTitle: () => null }} />
+        <Stack.Screen name="FollowersFollowing" component={Users} options={{ headerTitle: () => null }} />
       </Stack.Navigator>
     );
   };

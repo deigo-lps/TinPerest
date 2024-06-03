@@ -62,10 +62,10 @@ export default function Profile({ navigation, route }) {
               <Text style={styles.userName}>{user}</Text>
               <Text style={styles.desc}>{userData.description}</Text>
               <View style={styles.row}>
-                <Pressable>
+                <Pressable onPress={()=>{navigation.navigate("FollowersFollowing",{routeUsers: followers})}}>
                   <Text style={styles.text}>Followers: {followers.length}</Text>
                 </Pressable>
-                <Pressable>
+                <Pressable onPress={()=>{navigation.navigate("FollowersFollowing",{routeUsers: user !== ctx.user ? following : ctx.following})}}>
                   <Text style={styles.text}>Following: {user !== ctx.user ? following.length : ctx.following.length}</Text>
                 </Pressable>
               </View>
@@ -105,6 +105,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   favTitle: {
+    marginTop:16,
     fontSize: 18,
     fontWeight: "bold",
     color: "#e6e0e9",
