@@ -9,14 +9,13 @@ import awaitConfirmation from "../utils/awaitConfirmation";
 
 export default function CreateAccount({navigation}) {
   const [userName, setUserName] = useState("");
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const createUser = async () => {
     setIsLoading(true);
     const users = await handleApi({ method: "GET", url: "/users.json" });
-    for (text of [userName, email, password, description]) {
+    for (text of [userName, password, description]) {
       if (text.trim() === "") {
         Alert.alert("Missing Field", "Fill in every field.", [{ text: "Ok." }]);
         setIsLoading(false);
@@ -32,14 +31,13 @@ export default function CreateAccount({navigation}) {
     }
     const body = users || {};
     body[`${userName}`] = {
-      email: email,
       password: password,
       description: description,
     };
     const data = await handleApi({ body, method: "PUT", url: "/users.json" });
     if (data) {
       await awaitConfirmation({ title: "User Created", message: `${userName} created.` });
-      navigation.navigate("Login");
+      navigation.navigate("Home");
     }else{
       // TODO
     }
@@ -50,7 +48,6 @@ export default function CreateAccount({navigation}) {
       <Image style={styles.image} source={icon} />
       <View style={styles.container}>
         <Input value={userName} placeholder="User Name" onChangeText={(value) => setUserName(value)} />
-        <Input value={email} type="email-address" placeholder="Email" onChangeText={(value) => setEmail(value)} />
         <Input value={password} placeholder="Password" onChangeText={(value) => setPassword(value)} />
         <Input value={description} placeholder="Description" multiline={true} onChangeText={(value) => setDescription(value)} />
         <Button isLoading={isLoading} onPress={createUser}>

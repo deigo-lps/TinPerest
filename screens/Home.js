@@ -15,7 +15,7 @@ export default function Home({ navigation }) {
 
   const handleArtData = async (search) => {
     setIsLoaded(false);
-    let data = {data: []};
+    let data = { data: [] };
     if (!search || search === "") {
       const response = await fetch(
         "https://api.artic.edu/api/v1/artworks?fields=id,image_id,artist_id,title,artist_title,date_display,place_of_origin,description&limit=15"
@@ -37,7 +37,7 @@ export default function Home({ navigation }) {
   };
 
   useEffect(() => {
-    if (search === "" && search !== prevSearch) handleArtData();
+    if ((search === "" || !search) && search !== prevSearch) handleArtData();
   }, [search]);
 
   const handleSearch = () => {

@@ -14,8 +14,8 @@ export default function App() {
           headerTintColor: "#fff",
         }}
         >
-        <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+        <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
         <Stack.Screen name="Create Account" component={CreateAccount} options={{ headerTitle: () => null }} />
       </Stack.Navigator>
     );
