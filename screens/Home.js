@@ -6,9 +6,8 @@ import { FlatList } from "react-native-gesture-handler";
 import Loading from "../components/ui/Loading";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import InputButton from "../components/ui/InputButton";
-import UserContext from "../context/user-context";
 export default function Home({ navigation }) {
-  const ctx = useContext(UserContext);
+  const [data, setData] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [search, setSearch] = useState("");
   const [prevSearch, setPrevSearch] = useState(undefined);
@@ -40,7 +39,7 @@ export default function Home({ navigation }) {
         })
       );
     }
-    !page || page <= 1 ? ctx.setData(data.data) : ctx.setData((prev) => [...prev, ...data.data.filter((item) => item.image_id !== null)]);
+    !page || page <= 1 ? setData(data.data) : setData((prev) => [...prev, ...data.data.filter((item) => item.image_id !== null)]);
     setIsLoaded(true);
   };
 
@@ -70,7 +69,7 @@ export default function Home({ navigation }) {
       {isLoaded ? (
         <>
           <FlatList
-            data={ctx.data}
+            data={data}
             renderItem={({ item }) => (
               <ArtCard
                 onPress={() => {

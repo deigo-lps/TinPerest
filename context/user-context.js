@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import handleApi from "../utils/handleApi";
 
 const UserContext = React.createContext({
-  data: [],
-  setData: () => {},
   user: "",
   setUser: () => {},
   favorites: [],
@@ -12,7 +10,6 @@ const UserContext = React.createContext({
 });
 
 export const UserContextProvider = (props) => {
-  const [data, setData] = useState([]);
   const [user, setUser] = useState("");
   const [favorites, setFavorites] = useState([]);
 
@@ -31,7 +28,7 @@ export const UserContextProvider = (props) => {
   };
 
   return (
-    <UserContext.Provider value={{ data, setData, user, setUser, favorites, updateFavorites, initFavorites }}>
+    <UserContext.Provider value={{ user, setUser, favorites, updateFavorites, initFavorites }}>
       {props.children}
     </UserContext.Provider>
   );
