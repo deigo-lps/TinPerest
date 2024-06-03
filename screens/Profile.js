@@ -5,6 +5,7 @@ import handleApi from "../utils/handleApi";
 import Loading from "../components/ui/Loading";
 import ArtCard from "../components/ArtCard";
 import UserContext from "../context/user-context";
+import FollowBtn from "../components/ui/FollowBtn";
 export default function Profile({ navigation, route }) {
   const ctx = useContext(UserContext);
   const { user } = route.params || { user: ctx.user };
@@ -13,22 +14,6 @@ export default function Profile({ navigation, route }) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
-
-  const handleFollow = async () => {
-    let newCurrentUserFollowing;
-    let newFollowers;
-    if (ctx.following.includes(user)) {
-      newCurrentUserFollowing = ctx.following.filter((following) => following !== user);
-      newFollowers = followers.filter((follower) => follower !== ctx.user);
-    } else {
-      newCurrentUserFollowing = [...ctx.following, user];
-      newFollowers = [...followers, ctx.user];
-    }
-    await handleApi({ method: "PUT", url: `/users/${user}/followers.json`, body: newFollowers });
-    await handleApi({ method: "PUT", url: `/users/${ctx.user}/following.json`, body: newCurrentUserFollowing });
-    ctx.setFollowing(newCurrentUserFollowing);
-    setFollowers(newFollowers);
-  };
 
   useEffect(() => {
     const initialFetch = async () => {
@@ -85,9 +70,7 @@ export default function Profile({ navigation, route }) {
                 </Pressable>
               </View>
               {user !== ctx.user ? (
-                <Pressable style={styles.followBtn} onPress={handleFollow}>
-                  <Text style={styles.followBtnText}>{ctx.following.includes(user) ? "Unfollow" : "Follow"}</Text>
-                </Pressable>
+                <FollowBtn user={user} followers={followers} setFollowers={setFollowers}/>
               ) : (
                 <></>
               )}
@@ -125,17 +108,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     color: "#e6e0e9",
-    textAlign: "center",
-  },
-  followBtn: {
-    backgroundColor: "#d0bcff",
-    borderRadius: 100,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    marginBottom: 16,
-  },
-  followBtnText: {
-    fontSize: 16,
     textAlign: "center",
   },
   row: {

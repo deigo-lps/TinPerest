@@ -9,8 +9,9 @@ import Art from "./screens/Art";
 import Profile from "./screens/Profile";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faArrowRightFromBracket, faHouse, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRightFromBracket, faHouse, faUser, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { View } from "react-native";
+import Users from "./screens/Users";
 export default function App() {
   const Tab = createBottomTabNavigator();
   const LoginStack = () => {
@@ -82,8 +83,14 @@ export default function App() {
                   <FontAwesomeIcon icon={faUser} size={20} style={{ color: "#e6e0e9" }} />
                 );
               } else if (route.name === "LoginStack") {
-                return  (
-                  <FontAwesomeIcon icon={faArrowRightFromBracket} size={20} style={{ color: "#e6e0e9" }} />
+                return <FontAwesomeIcon icon={faArrowRightFromBracket} size={20} style={{ color: "#e6e0e9" }} />;
+              } else if (route.name === "Users") {
+                return focused ? (
+                  <View style={{ borderRadius: 1000, backgroundColor: "#4a4458", padding: 10 }}>
+                    <FontAwesomeIcon icon={faUsers} size={20} style={{ color: "#e6e0e9" }} />
+                  </View>
+                ) : (
+                  <FontAwesomeIcon icon={faUsers} size={20} style={{ color: "#e6e0e9" }} />
                 );
               }
             },
@@ -92,6 +99,7 @@ export default function App() {
           <Tab.Screen name="LoginStack" component={LoginStack} options={{ headerShown: false }} />
           <Tab.Screen name="Main Navigation" component={MainStack} options={{ headerShown: false }} />
           <Tab.Screen name="MyProfile" component={Profile} options={{ headerShown: false }} />
+          <Tab.Screen name="Users" component={Users} options={{ headerShown: false }} />
         </Tab.Navigator>
       </NavigationContainer>
     </UserContextProvider>
