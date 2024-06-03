@@ -22,7 +22,7 @@ export default function Home({ navigation }) {
     let data = { data: [] };
     if (!search || search === "") {
       const response = await fetch(
-        `https://api.artic.edu/api/v1/artworks?fields=id,image_id,artist_id,title,artist_title,date_display,place_of_origin,description&limit=15&page=${
+        `https://api.artic.edu/api/v1/artworks?fields=id,image_id,artist_id,title,artist_title,date_display,place_of_origin,description,dimensions_detail&limit=15&page=${
           page || 1
         }`
       );
@@ -34,7 +34,7 @@ export default function Home({ navigation }) {
       totalPages.current = linksData.pagination.total_pages;
       await Promise.all(
         linksData.data.map(async (linkData) => {
-          const response = await fetch(`${linkData.api_link}?fields=id,image_id,artist_id,title,artist_title,date_display,place_of_origin,description`);
+          const response = await fetch(`${linkData.api_link}?fields=id,image_id,artist_id,title,artist_title,date_display,place_of_origin,description,dimensions_detail`);
           const indivData = await response.json();
           data.data.push(indivData.data);
         })
@@ -71,7 +71,14 @@ export default function Home({ navigation }) {
         <>
           <FlatList
             data={[...data]}
-            renderItem={({ item }) => <ArtCard data={item} isFavorite={ctx.favorites?.includes(item.id)} />}
+            renderItem={({ item }) => (
+              <ArtCard
+                onPress={() => {
+                  navigation.navigate("Art", { data: item });
+                }}
+                data={item}
+              />
+            )}
             keyExtractor={(item) => item.image_id}
             contentContainerStyle={styles.contentContainer}
             onEndReached={fetchMoreData}
@@ -98,7 +105,6 @@ export default function Home({ navigation }) {
       ) : (
         <Loading />
       )}
-      <StatusBar style="auto" />
     </Container>
   );
 }
