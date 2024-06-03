@@ -4,10 +4,12 @@ import icon from "../assets/favicon.png";
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import handleApi from "../utils/handleApi";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import awaitConfirmation from "../utils/awaitConfirmation";
+import UserContext from "../context/user-context";
 
-export default function CreateAccount({navigation}) {
+export default function CreateAccount({ navigation }) {
+  const ctx = useContext(UserContext);
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [description, setDescription] = useState("");
@@ -36,9 +38,11 @@ export default function CreateAccount({navigation}) {
     };
     const data = await handleApi({ body, method: "PUT", url: "/users.json" });
     if (data) {
+      ctx.setUser(userName);
+      ctx.initFavorites(null);
       await awaitConfirmation({ title: "User Created", message: `${userName} created.` });
       navigation.navigate("Home");
-    }else{
+    } else {
       // TODO
     }
     setIsLoading(false);

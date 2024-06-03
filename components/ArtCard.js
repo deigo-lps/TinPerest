@@ -2,11 +2,19 @@ import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faFlag, faPalette, faStar as FaStarSolid } from "@fortawesome/free-solid-svg-icons";
 import { faStar } from "@fortawesome/free-regular-svg-icons";
+import { useContext, useState } from "react";
+import UserContext from "../context/user-context";
 export default function ArtCard({ data, onPress, isFavorite }) {
-  
+  const ctx = useContext(UserContext);
+  const [isLoading, setIsLoading] = useState(false);
+  const handleFavorite = async () => {
+    setIsLoading(true);
+    await ctx.updateFavorites(data.id);
+    setIsLoading(false);
+  };
   return (
     <Pressable style={styles.card} onPress={onPress}>
-      <Pressable style={styles.star}>
+      <Pressable disabled={isLoading} style={styles.star} onPress={handleFavorite}>
         <FontAwesomeIcon icon={isFavorite ? FaStarSolid : faStar} style={{ color: "yellow" }} size={24} />
       </Pressable>
       <Image style={styles.image} source={{ uri: `https://www.artic.edu/iiif/2/${data.image_id}/full/843,/0/default.jpg` }} />
@@ -53,7 +61,6 @@ const styles = StyleSheet.create({
   desc: {
     fontSize: 16,
     color: "#e6e0e9",
-    // lineHeight: 16,
   },
   star: {
     position: "absolute",

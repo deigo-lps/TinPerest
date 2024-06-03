@@ -1,13 +1,15 @@
 import { Pressable, StatusBar, StyleSheet, Text, View } from "react-native";
 import Container from "../components/ui/Container";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import ArtCard from "../components/ArtCard";
 import { FlatList } from "react-native-gesture-handler";
 import Loading from "../components/ui/Loading";
 import Input from "../components/ui/Input";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import UserContext from "../context/user-context";
 export default function Home({ navigation }) {
+  const ctx = useContext(UserContext);
   const [isLoaded, setIsLoaded] = useState(false);
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
@@ -69,13 +71,13 @@ export default function Home({ navigation }) {
         <>
           <FlatList
             data={[...data]}
-            renderItem={({ item }) => <ArtCard data={item} />}
+            renderItem={({ item }) => <ArtCard data={item} isFavorite={ctx.favorites?.includes(item.id)} />}
             keyExtractor={(item) => item.image_id}
             contentContainerStyle={styles.contentContainer}
             onEndReached={fetchMoreData}
             onEndReachedThreshold={0.5}
             ListFooterComponent={totalPages.current > currentPage.current ? <Loading /> : <></>}
-            style={{width: "100%"}}
+            style={{ width: "100%" }}
             ListHeaderComponent={
               <View style={styles.searchBar}>
                 <Input
