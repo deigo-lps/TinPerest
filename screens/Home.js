@@ -8,7 +8,7 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import InputButton from "../components/ui/InputButton";
 import UserContext from "../context/user-context";
 export default function Home({ navigation }) {
-  const ctx = useContext(UserContext)
+  const ctx = useContext(UserContext);
   const [isLoaded, setIsLoaded] = useState(false);
   const [search, setSearch] = useState("");
   const [prevSearch, setPrevSearch] = useState(undefined);
@@ -20,7 +20,7 @@ export default function Home({ navigation }) {
     let data = { data: [] };
     if (!search || search === "") {
       const response = await fetch(
-        `https://api.artic.edu/api/v1/artworks?fields=id,image_id,artist_id,title,artist_title,date_display,place_of_origin,description,dimensions_detail&limit=15&page=${
+        `https://api.artic.edu/api/v1/artworks?fields=api_link,id,image_id,artist_id,title,artist_title,date_display,place_of_origin,description,dimensions_detail&limit=15&page=${
           page || 1
         }`
       );
@@ -33,7 +33,7 @@ export default function Home({ navigation }) {
       await Promise.all(
         linksData.data.map(async (linkData) => {
           const response = await fetch(
-            `${linkData.api_link}?fields=id,image_id,artist_id,title,artist_title,date_display,place_of_origin,description,dimensions_detail`
+            `${linkData.api_link}?fields=id,api_link,image_id,artist_id,title,artist_title,date_display,place_of_origin,description,dimensions_detail`
           );
           const indivData = await response.json();
           data.data.push(indivData.data);

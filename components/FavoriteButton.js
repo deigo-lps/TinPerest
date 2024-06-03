@@ -11,12 +11,12 @@ export default function FavoriteButton({ data }) {
 
   const handleFavorite = async () => {
     setIsLoading(true);
-    await ctx.updateFavorites(data.id);
+    await ctx.updateFavorites(data.api_link);
     setIsLoading(false);
   };
   return (
     <Pressable disabled={isLoading} style={styles.star} onPress={handleFavorite}>
-      <FontAwesomeIcon icon={ctx.favorites?.includes(data.id) ? FaStarSolid : faStar} style={{ color: "yellow" }} size={24} />
+      <FontAwesomeIcon icon={ctx.favorites?.includes(data.api_link) ? FaStarSolid : faStar} style={{ color: "yellow" }} size={24} />
     </Pressable>
   );
 }

@@ -1,11 +1,16 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
-export default function Comments({ data }) {
+export default function Comment({ data, navigation }) {
   return (
-    <View style={styles.comment}>
+    <Pressable
+      style={styles.comment}
+      onPress={() => {
+        navigation.navigate("Profile", { user: data.user });
+      }}
+    >
       <Text style={styles.userName}>{data.user}</Text>
       <Text style={styles.commentText}>{data.comment}</Text>
-    </View>
+    </Pressable>
   );
 }
 

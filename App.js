@@ -6,6 +6,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import Home from "./screens/Home";
 import { UserContextProvider } from "./context/user-context";
 import Art from "./screens/Art";
+import Profile from "./screens/Profile";
 export default function App() {
   const LoginStack = () => {
     const Stack = createStackNavigator();
@@ -24,6 +25,7 @@ export default function App() {
         <Stack.Screen name="Create Account" component={CreateAccount} options={{ headerTitle: () => null }} />
         <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
         <Stack.Screen name="Art" component={Art} options={{ headerTitle: () => null }} />
+        <Stack.Screen name="Profile" component={Profile} options={{ headerTitle: () => null }} />
       </Stack.Navigator>
     );
   };

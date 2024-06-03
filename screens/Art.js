@@ -9,7 +9,7 @@ import { faComment } from "@fortawesome/free-solid-svg-icons";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../context/user-context";
 import handleApi from "../utils/handleApi";
-export default function Art({ route }) {
+export default function Art({ navigation, route }) {
   const ctx = useContext(UserContext);
   const { data } = route.params;
   let aspectRatio;
@@ -38,7 +38,7 @@ export default function Art({ route }) {
     <Container style={{ paddingTop: 0 }}>
       <FlatList
         data={comments}
-        renderItem={({ item }) => <Comment data={item} />}
+        renderItem={({ item }) => <Comment data={item} navigation={navigation} />}
         keyExtractor={(item, i) => i}
         contentContainerStyle={styles.contentContainer}
         style={{ width: "100%" }}
