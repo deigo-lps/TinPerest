@@ -1,17 +1,15 @@
-import { Pressable, StatusBar, StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import Container from "../components/ui/Container";
 import { useContext, useEffect, useRef, useState } from "react";
 import ArtCard from "../components/ArtCard";
 import { FlatList } from "react-native-gesture-handler";
 import Loading from "../components/ui/Loading";
-import Input from "../components/ui/Input";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import InputButton from "../components/ui/InputButton";
 import UserContext from "../context/user-context";
 export default function Home({ navigation }) {
-  const ctx = useContext(UserContext);
+  const ctx = useContext(UserContext)
   const [isLoaded, setIsLoaded] = useState(false);
-  const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
   const [prevSearch, setPrevSearch] = useState(undefined);
   const totalPages = useRef(1);
@@ -34,13 +32,15 @@ export default function Home({ navigation }) {
       totalPages.current = linksData.pagination.total_pages;
       await Promise.all(
         linksData.data.map(async (linkData) => {
-          const response = await fetch(`${linkData.api_link}?fields=id,image_id,artist_id,title,artist_title,date_display,place_of_origin,description,dimensions_detail`);
+          const response = await fetch(
+            `${linkData.api_link}?fields=id,image_id,artist_id,title,artist_title,date_display,place_of_origin,description,dimensions_detail`
+          );
           const indivData = await response.json();
           data.data.push(indivData.data);
         })
       );
     }
-    !page || page <= 1 ? setData(data.data) : setData((prev) => [...prev, ...data.data.filter((item) => item.image_id !== null)]);
+    !page || page <= 1 ? ctx.setData(data.data) : ctx.setData((prev) => [...prev, ...data.data.filter((item) => item.image_id !== null)]);
     setIsLoaded(true);
   };
 
@@ -70,7 +70,7 @@ export default function Home({ navigation }) {
       {isLoaded ? (
         <>
           <FlatList
-            data={[...data]}
+            data={ctx.data}
             renderItem={({ item }) => (
               <ArtCard
                 onPress={() => {
@@ -86,19 +86,15 @@ export default function Home({ navigation }) {
             ListFooterComponent={totalPages.current > currentPage.current ? <Loading /> : <></>}
             style={{ width: "100%" }}
             ListHeaderComponent={
-              <View style={styles.searchBar}>
-                <Input
-                  value={search}
-                  onChangeText={(value) => {
-                    setSearch(value);
-                  }}
-                  placeholder="Search"
-                  style={{ flex: 1, borderWidth: 0 }}
-                />
-                <Pressable style={styles.searchButton} onPress={() => handleSearch()}>
-                  <FontAwesomeIcon icon={faMagnifyingGlass} style={{ color: "#e6e0e9" }} size={20} />
-                </Pressable>
-              </View>
+              <InputButton
+                value={search}
+                icon={faMagnifyingGlass}
+                placeholder="Search"
+                onChangeText={(value) => {
+                  setSearch(value);
+                }}
+                onPress={handleSearch}
+              />
             }
           />
         </>
@@ -112,18 +108,5 @@ export default function Home({ navigation }) {
 const styles = StyleSheet.create({
   contentContainer: {
     gap: 16,
-  },
-  searchBar: {
-    width: "100%",
-    flexDirection: "row",
-    alignItems: "center",
-    borderWidth: 2,
-    borderColor: "#938f99",
-    borderRadius: 8,
-  },
-  searchButton: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingRight: 16,
   },
 });

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "jogo_memoria",
-    "slug": "jogo_memoria",
+    "name": "TinPerest",
+    "slug": "TinPerest",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
