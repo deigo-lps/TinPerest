@@ -7,18 +7,17 @@ import UserContext from "../context/user-context";
 import User from "../components/User";
 export default function Users({ navigation, route }) {
   const ctx = useContext(UserContext);
-  const { routeUsers } = route.params;
+  const { routeUsers } = route.params || { routeUsers: undefined };
   const [users, setUsers] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
     const fetchUsers = async () => {
       setIsLoaded(false);
       const usersData = await handleApi({ method: "GET", url: "/users.json" });
-      if (!routeUsers){
+      if (!routeUsers) {
         delete usersData[ctx.user];
         setUsers(usersData);
-      } 
-      else setUsers(Object.fromEntries(Object.entries(usersData).filter(([key]) => routeUsers.includes(key))));
+      } else setUsers(Object.fromEntries(Object.entries(usersData).filter(([key]) => routeUsers.includes(key))));
       setIsLoaded(true);
     };
     fetchUsers();
